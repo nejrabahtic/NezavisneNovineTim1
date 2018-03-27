@@ -79,7 +79,7 @@ public class MainFragment extends BrowseFragment {
     private Timer mBackgroundTimer;
     private String mBackgroundUri;
     private BackgroundManager mBackgroundManager;
-
+   public String  REQUEST_TAG = "com.androidtutorialpoint.volleyStringRequest";
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -89,7 +89,7 @@ public class MainFragment extends BrowseFragment {
         prepareBackgroundManager();
 
         setupUIElements();
-
+        getCategories();
        // loadRows();
 
         setupEventListeners();
@@ -103,7 +103,46 @@ public class MainFragment extends BrowseFragment {
             mBackgroundTimer.cancel();
         }
     }
+    private void getCategories(){
+        mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        String url = "http://dtp.nezavisne.com/app/meni";
+        final CardPresenter cardPresenter = new CardPresenter();
 
+
+
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                int length= response.length();
+                for(int i=0; i< length; i++){
+                    try {
+                        JSONObject obj = response.getJSONObject(i);
+                        String name = obj.getString("Naziv");
+                        String menuID = obj.getString("meniID");
+                        String color= obj.getString("Boja");
+                        HeaderItem header = new HeaderItem(i, name);
+                        //mRowsAdapter.add(header);
+                        //mRowsAdapter.add(new ListRow(header, listRowAdapter));
+                        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+                        //listRowAdapter.add(header);
+                        //ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+//                         HeaderItem header = new HeaderItem(i, categories.get(i).getName());
+                         mRowsAdapter.add(new ListRow(header, listRowAdapter));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest, REQUEST_TAG);
+        setAdapter(mRowsAdapter);
+    }
 
     private void loadRows() {/*
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
