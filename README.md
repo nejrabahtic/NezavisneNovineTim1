@@ -1,6 +1,6 @@
 # NezavisneNovineTim1
 
-Nejra Bahtić
-Bojan Dobrečević
-Vukašin Janković
-Matiss Riders
+- Nejra Bahtić
+- Bojan Dobrečević
+- Vukašin Janković
+- Matiss Riders
