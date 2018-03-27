@@ -14,8 +14,11 @@
 
 package com.telegroup.nezavisnenovine;
 
+import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,10 +48,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";
@@ -69,14 +82,15 @@ public class MainFragment extends BrowseFragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate");
+
+        Log.i(TAG, "onCreatexxxxxxxxxxx");
         super.onActivityCreated(savedInstanceState);
 
         prepareBackgroundManager();
 
         setupUIElements();
 
-        loadRows();
+       // loadRows();
 
         setupEventListeners();
     }
@@ -90,33 +104,71 @@ public class MainFragment extends BrowseFragment {
         }
     }
 
-    private void loadRows() {
-        List<Movie> list = MovieList.setupMovies();
+
+    private void loadRows() {/*
+        mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        final CardPresenter cardPresenter = new CardPresenter();
+
+        String url = "http://dtp.nezavisne.com/app/meni";
+        final List<Category> categories=new ArrayList<>();
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                int length= response.length();
+                for(int i=0; i< length; i++){
+                    try {
+                        JSONObject obj = response.getJSONObject(i);
+                        String name = obj.getString("Naziv");
+                        String menuID = obj.getString("meniID");
+                        String color= obj.getString("Boja");
+                        Category cat= new Category(name, menuID, color);
+                        categories.add(cat);
+                        Log.d(TAG, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxobj = "+ name);
+                        HeaderItem header = new HeaderItem(i, categories.get(i).getName());
+                        //mRowsAdapter.add(new ListRow(header, listRowAdapter));
+                        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+                        listRowAdapter.add(name);
+                       // ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+                       // HeaderItem header = new HeaderItem(i, categories.get(i).getName());
+                       // mRowsAdapter.add(new ListRow(header, listRowAdapter));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        CardPresenter cardPresenter = new CardPresenter();
-
+        //final CardPresenter cardPresenter = new CardPresenter();
+        /*
         int i;
         for (i = 0; i < NUM_ROWS; i++) {
             if (i != 0) {
-                Collections.shuffle(list);
+                //Collections.shuffle(list);
             }
-            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-            for (int j = 0; j < NUM_COLS; j++) {
-                listRowAdapter.add(list.get(j % 5));
-            }
-            HeaderItem header = new HeaderItem(i, MovieList.MOVIE_CATEGORY[i]);
+            //ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+            //for (int j = 0; j < NUM_COLS; j++) {
+                listRowAdapter.add(categories.get(j % 5));
+            //}
+            HeaderItem header = new HeaderItem(i, categories.get(i).getName());
             mRowsAdapter.add(new ListRow(header, listRowAdapter));
         }
 
-        HeaderItem gridHeader = new HeaderItem(i, "PREFERENCES");
+        HeaderItem gridHeader = new HeaderItem(10, "PREFERENCES");
 
         GridItemPresenter mGridPresenter = new GridItemPresenter();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
         gridRowAdapter.add(getResources().getString(R.string.grid_view));
         gridRowAdapter.add(getString(R.string.error_fragment));
         gridRowAdapter.add(getResources().getString(R.string.personal_settings));
-        mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+        */
+       // mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
         setAdapter(mRowsAdapter);
     }
