@@ -15,6 +15,7 @@
 package com.telegroup.nezavisnenovine;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import android.util.Log;
 
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
@@ -23,6 +24,7 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
         //Movie movie = (Movie) item;
         News news = (News) item;
         if (news != null) {
+
             viewHolder.getTitle().setText(news.getTitle());
             viewHolder.getSubtitle().setText(news.getLid());
             viewHolder.getBody().setText(news.getLid());

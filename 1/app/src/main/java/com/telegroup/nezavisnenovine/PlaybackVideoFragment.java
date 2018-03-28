@@ -32,8 +32,8 @@ public class PlaybackVideoFragment extends VideoSupportFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Movie movie = (Movie) getActivity()
-                .getIntent().getSerializableExtra(DetailsActivity.MOVIE);
+        final News news = (News) getActivity()
+                .getIntent().getSerializableExtra(DetailsActivity.NEWS);
 
         VideoSupportFragmentGlueHost glueHost =
                 new VideoSupportFragmentGlueHost(PlaybackVideoFragment.this);
@@ -41,8 +41,8 @@ public class PlaybackVideoFragment extends VideoSupportFragment {
         mTransportControlGlue = new MediaPlayerGlue(getActivity());
         mTransportControlGlue.setMode(MediaPlayerGlue.NO_REPEAT);
         mTransportControlGlue.setHost(glueHost);
-        mTransportControlGlue.setTitle(movie.getTitle());
-        mTransportControlGlue.setArtist(movie.getDescription());
+        mTransportControlGlue.setTitle(news.getTitle());
+        mTransportControlGlue.setArtist(news.getLid());
         mTransportControlGlue.addPlayerCallback(
                 new PlaybackGlue.PlayerCallback() {
                     @Override
@@ -52,7 +52,7 @@ public class PlaybackVideoFragment extends VideoSupportFragment {
                         }
                     }
                 });
-        mTransportControlGlue.setVideoUrl(movie.getVideoUrl());
+        //mTransportControlGlue.setVideoUrl(news.getVideoUrl());
     }
 
     @Override

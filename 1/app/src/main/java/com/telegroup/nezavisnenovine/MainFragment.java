@@ -175,80 +175,7 @@ public class MainFragment extends BrowseFragment {
         AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest, REQUEST_TAG);
         setAdapter(mRowsAdapter);
     }
-
-    private void loadRows() {/*
-        mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        final CardPresenter cardPresenter = new CardPresenter();
-
-        String url = "http://dtp.nezavisne.com/app/meni";
-        final List<Category> categories=new ArrayList<>();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                int length= response.length();
-                for(int i=0; i< length; i++){
-                    try {
-                        JSONObject obj = response.getJSONObject(i);
-                        String name = obj.getString("Naziv");
-                        String menuID = obj.getString("meniID");
-                        String color= obj.getString("Boja");
-                        Category cat= new Category(name, menuID, color);
-                        categories.add(cat);
-                        Log.d(TAG, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxobj = "+ name);
-                        HeaderItem header = new HeaderItem(i, categories.get(i).getName());
-                        //mRowsAdapter.add(new ListRow(header, listRowAdapter));
-                        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-                        listRowAdapter.add(name);
-                       // ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-                       // HeaderItem header = new HeaderItem(i, categories.get(i).getName());
-                       // mRowsAdapter.add(new ListRow(header, listRowAdapter));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        //final CardPresenter cardPresenter = new CardPresenter();
-        /*
-        int i;
-        for (i = 0; i < NUM_ROWS; i++) {
-            if (i != 0) {
-                //Collections.shuffle(list);
-            }
-            //ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-            //for (int j = 0; j < NUM_COLS; j++) {
-                listRowAdapter.add(categories.get(j % 5));
-            //}
-            HeaderItem header = new HeaderItem(i, categories.get(i).getName());
-            mRowsAdapter.add(new ListRow(header, listRowAdapter));
-        }
-
-        HeaderItem gridHeader = new HeaderItem(10, "PREFERENCES");
-
-        GridItemPresenter mGridPresenter = new GridItemPresenter();
-        ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
-        gridRowAdapter.add(getResources().getString(R.string.grid_view));
-        gridRowAdapter.add(getString(R.string.error_fragment));
-        gridRowAdapter.add(getResources().getString(R.string.personal_settings));
-        */
-       // mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
-
-        setAdapter(mRowsAdapter);
-    }
-
-
-
-
-
-
+    
 
     private void prepareBackgroundManager() {
 
@@ -319,7 +246,7 @@ public class MainFragment extends BrowseFragment {
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof News) {
-                //Log.d(TAG, "onItemClicked: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
                 News news =(News) item;
                 Log.d(TAG, "Item: " + item.toString());
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
@@ -346,8 +273,8 @@ public class MainFragment extends BrowseFragment {
         @Override
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof Movie) {
-                mBackgroundUri = ((Movie) item).getBackgroundImageUrl();
+            if (item instanceof News) {
+                mBackgroundUri = ((News) item).getCoverImageUrl();
                 startBackgroundTimer();
             }
         }
