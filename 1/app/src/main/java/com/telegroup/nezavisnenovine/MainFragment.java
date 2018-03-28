@@ -175,7 +175,7 @@ public class MainFragment extends BrowseFragment {
         AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest, REQUEST_TAG);
         setAdapter(mRowsAdapter);
     }
-    
+
 
     private void prepareBackgroundManager() {
 
@@ -247,8 +247,37 @@ public class MainFragment extends BrowseFragment {
 
             if (item instanceof News) {
 
-                News news =(News) item;
+                final News news =(News) item;
                 Log.d(TAG, "Item: " + item.toString());
+
+                String url2 = "http://dtp.nezavisne.com/app/v2/vijesti/" + news.getNewsID();
+
+                JsonArrayRequest jsonArrayRequest2 = new JsonArrayRequest(Request.Method.GET, url2, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        int length= response.length();
+                        try {
+                            JSONObject obj = response.getJSONObject(i);
+
+                            String lid = obj.getString("Lid");
+
+                            news.setProfileImageUrl(image);
+
+                            listRowAdapter.add(news);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
                 intent.putExtra(DetailsActivity.NEWS, news);
 
