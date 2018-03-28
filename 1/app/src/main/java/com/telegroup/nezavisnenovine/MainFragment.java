@@ -252,18 +252,26 @@ public class MainFragment extends BrowseFragment {
 
                 String url2 = "http://dtp.nezavisne.com/app/v2/vijesti/" + news.getNewsID();
 
-                JsonArrayRequest jsonArrayRequest2 = new JsonArrayRequest(Request.Method.GET, url2, null, new Response.Listener<JSONArray>() {
+                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url2, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         int length= response.length();
                         try {
-                            JSONObject obj = response.getJSONObject(i);
+                            JSONObject obj = response.getJSONObject(0);
+                            JSONArray imageArray = obj.getJSONArray("Slika");
+                            JSONObject image = imageArray.getJSONObject(0);
+                            String imageUrl = image.getString("slikaURL");
+                            String body = obj.getString("Tjelo");
+                            news.setBody(body);
+                            news.setCoverImageUrl(imageUrl);
 
-                            String lid = obj.getString("Lid");
 
-                            news.setProfileImageUrl(image);
+                             //news.setLid(obj.getString("Lid"));
 
-                            listRowAdapter.add(news);
+
+                            //news.setProfileImageUrl(image);
+
+                            //listRowAdapter.add(news);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -277,6 +285,7 @@ public class MainFragment extends BrowseFragment {
                     }
                 });
 
+                AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest, REQUEST_TAG);
 
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
                 intent.putExtra(DetailsActivity.NEWS, news);

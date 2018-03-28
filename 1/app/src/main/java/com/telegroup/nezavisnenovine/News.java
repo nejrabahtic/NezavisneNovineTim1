@@ -25,6 +25,38 @@ public class News  implements Serializable{
     private String profileImageUrl;
     private String coverImageUrl;
 
+    public void setNewsID(String newsID) {
+        this.newsID = newsID;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setLid(String lid) {
+        this.lid = lid;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setProfileImage(Bitmap profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public void setCoverImage(Bitmap coverImage) {
+        this.coverImage = coverImage;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
     public News(String newsID, String title, String lid, String author, String date, Bitmap profileImage, Bitmap coverImage, String body) {
         this.newsID = newsID;
         this.title = title;
