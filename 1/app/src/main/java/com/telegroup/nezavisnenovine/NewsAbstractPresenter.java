@@ -31,6 +31,12 @@ public abstract class NewsAbstractPresenter extends Presenter {
         final TextView mTitle;
         final TextView mSubtitle;
         final TextView mBody;
+        final TextView newsBody;
+
+        public TextView getNewsBody() {
+            return newsBody;
+        }
+
         final int mTitleMargin;
         final int mUnderTitleBaselineMargin;
         final int mUnderSubtitleBaselineMargin;
@@ -46,9 +52,10 @@ public abstract class NewsAbstractPresenter extends Presenter {
 
         public ViewHolder(final View view) {
             super(view);
-            mTitle = (TextView) view.findViewById(R.id.lb_details_description_title);
-            mSubtitle = (TextView) view.findViewById(R.id.lb_details_description_subtitle);
-            mBody = (TextView) view.findViewById(R.id.lb_details_description_body);
+            mTitle = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.lb_details_description_title);
+            mSubtitle = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.lb_details_description_subtitle);
+            mBody = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.lb_details_description_body);
+            newsBody = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.body);
 
             FontMetricsInt titleFontMetricsInt = getFontMetricsInt(mTitle);
             final int titleAscent = view.getResources().getDimensionPixelSize(
@@ -131,6 +138,8 @@ public abstract class NewsAbstractPresenter extends Presenter {
             return mBody;
         }
 
+
+
         private FontMetricsInt getFontMetricsInt(TextView textView) {
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setTextSize(textView.getTextSize());
@@ -143,7 +152,7 @@ public abstract class NewsAbstractPresenter extends Presenter {
     public final ViewHolder onCreateViewHolder(ViewGroup parent) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.lb_details_description, parent, false);
+                .inflate(com.telegroup.nezavisnenovine.R.layout.lb_details_description, parent, false);
         return new ViewHolder(v);
     }
 

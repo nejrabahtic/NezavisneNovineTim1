@@ -28,7 +28,7 @@ public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
             viewHolder.getTitle().setText(news.getTitle());
             viewHolder.getSubtitle().setText(news.getLid());
             viewHolder.getBody().setText(news.getBody());
-
+            viewHolder.getNewsBody().setText(news.getBody());
         }
     }
 }
