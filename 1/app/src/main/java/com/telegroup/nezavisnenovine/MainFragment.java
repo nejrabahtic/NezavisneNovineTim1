@@ -261,7 +261,7 @@ public class MainFragment extends BrowseFragment {
 
     private void setupUIElements() {
          setBadgeDrawable(getActivity().getResources().getDrawable(
-        R.drawable.nezavisne_main_fragment));
+        R.drawable.nezavisne_main_fragmet_bigger));
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent
         // over title
         setHeadersState(HEADERS_ENABLED);
