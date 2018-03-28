@@ -17,7 +17,7 @@ package com.telegroup.nezavisnenovine;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.util.Log;
 
-public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
+public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
 
     @Override
     protected void onBindDescription(ViewHolder viewHolder, Object item) {
@@ -28,6 +28,7 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
             viewHolder.getTitle().setText(news.getTitle());
             viewHolder.getSubtitle().setText(news.getLid());
             viewHolder.getBody().setText(news.getBody());
+
         }
     }
 }

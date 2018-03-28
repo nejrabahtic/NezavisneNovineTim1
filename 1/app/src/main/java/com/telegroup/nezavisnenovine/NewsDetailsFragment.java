@@ -135,24 +135,24 @@ public class NewsDetailsFragment extends DetailsFragment {
                     }
                 });
 
-        ArrayObjectAdapter actionAdapter = new ArrayObjectAdapter();
-
-        actionAdapter.add(
-                new Action(
-                        ACTION_WATCH_TRAILER,
-                        getResources().getString(R.string.watch_trailer_1),
-                        getResources().getString(R.string.watch_trailer_2)));
-        actionAdapter.add(
-                new Action(
-                        ACTION_RENT,
-                        getResources().getString(R.string.rent_1),
-                        getResources().getString(R.string.rent_2)));
-        actionAdapter.add(
-                new Action(
-                        ACTION_BUY,
-                        getResources().getString(R.string.buy_1),
-                        getResources().getString(R.string.buy_2)));
-        row.setActionsAdapter(actionAdapter);
+//        ArrayObjectAdapter actionAdapter = new ArrayObjectAdapter();
+//
+//        actionAdapter.add(
+//                new Action(
+//                        ACTION_WATCH_TRAILER,
+//                        getResources().getString(R.string.watch_trailer_1),
+//                        getResources().getString(R.string.watch_trailer_2)));
+//        actionAdapter.add(
+//                new Action(
+//                        ACTION_RENT,
+//                        getResources().getString(R.string.rent_1),
+//                        getResources().getString(R.string.rent_2)));
+//        actionAdapter.add(
+//                new Action(
+//                        ACTION_BUY,
+//                        getResources().getString(R.string.buy_1),
+//                        getResources().getString(R.string.buy_2)));
+//        row.setActionsAdapter(actionAdapter);
 
         mAdapter.add(row);
     }

@@ -262,6 +262,8 @@ public class MainFragment extends BrowseFragment {
                             JSONObject image = imageArray.getJSONObject(0);
                             String imageUrl = image.getString("slikaURL");
                             String body = obj.getString("Tjelo");
+                            String lid = obj.getString("Lid");
+                            news.setLid(lid);
                             news.setBody(body);
                             news.setCoverImageUrl(imageUrl);
 
