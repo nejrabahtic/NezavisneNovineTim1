@@ -14,7 +14,10 @@
 
 package com.telegroup.nezavisnenovine;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,8 +26,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.BackgroundManager;
@@ -83,7 +89,7 @@ public class MainFragment extends BrowseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
-        Log.i(TAG, "onCreatexxxxxxxxxxx");
+        Log.i(TAG, "onCreate");
         super.onActivityCreated(savedInstanceState);
 
         prepareBackgroundManager();
@@ -108,9 +114,6 @@ public class MainFragment extends BrowseFragment {
         String url = "http://dtp.nezavisne.com/app/meni";
         final CardPresenter cardPresenter = new CardPresenter();
 
-
-
-
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -121,13 +124,42 @@ public class MainFragment extends BrowseFragment {
                         String name = obj.getString("Naziv");
                         String menuID = obj.getString("meniID");
                         String color= obj.getString("Boja");
+                        String url2= "http://dtp.nezavisne.com/app/rubrika/"+menuID+ "/1/10";
+                        final ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
                         HeaderItem header = new HeaderItem(i, name);
-                        //mRowsAdapter.add(header);
-                        //mRowsAdapter.add(new ListRow(header, listRowAdapter));
-                        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-                        //listRowAdapter.add(header);
-                        //ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-//                         HeaderItem header = new HeaderItem(i, categories.get(i).getName());
+                        JsonArrayRequest jsonArrayRequest2 = new JsonArrayRequest(Request.Method.GET, url2, null, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                int length= response.length();
+                                for(int i=0; i< length; i++){
+                                    try {
+                                        JSONObject obj = response.getJSONObject(i);
+                                        String newsID = obj.getString("vijestID");
+                                        String title = obj.getString("Naslov");
+                                        String lid = obj.getString("Lid");
+                                        String author = obj.getString("Autor");
+                                        String date = obj.getString("Datum");
+                                        String image = obj.getString("Slika");
+                                        News news= new News(newsID,title, lid, author, date, null );
+                                        news.setProfileImageUrl(image);
+
+                                        listRowAdapter.add(news);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+
+                        AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest2, REQUEST_TAG);
+
+                       // ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
                          mRowsAdapter.add(new ListRow(header, listRowAdapter));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -212,6 +244,12 @@ public class MainFragment extends BrowseFragment {
         setAdapter(mRowsAdapter);
     }
 
+
+
+
+
+
+
     private void prepareBackgroundManager() {
 
         mBackgroundManager = BackgroundManager.getInstance(getActivity());
@@ -222,8 +260,8 @@ public class MainFragment extends BrowseFragment {
     }
 
     private void setupUIElements() {
-        // setBadgeDrawable(getActivity().getResources().getDrawable(
-        // R.drawable.videos_by_google_banner));
+         setBadgeDrawable(getActivity().getResources().getDrawable(
+        R.drawable.nezavisne_main_fragment));
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent
         // over title
         setHeadersState(HEADERS_ENABLED);
@@ -280,11 +318,12 @@ public class MainFragment extends BrowseFragment {
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
-            if (item instanceof Movie) {
-                Movie movie = (Movie) item;
+            if (item instanceof News) {
+                //Log.d(TAG, "onItemClicked: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                News news =(News) item;
                 Log.d(TAG, "Item: " + item.toString());
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra(DetailsActivity.MOVIE, movie);
+                intent.putExtra(DetailsActivity.NEWS, news);
 
                 Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         getActivity(),
