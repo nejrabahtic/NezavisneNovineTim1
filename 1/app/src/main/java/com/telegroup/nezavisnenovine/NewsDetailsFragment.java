@@ -117,13 +117,13 @@ public class NewsDetailsFragment extends DetailsFragment {
         Log.d(TAG, "doInBackground: " + mSelectedNews.toString());
         final DetailsOverviewRow row = new DetailsOverviewRow(mSelectedNews);
         row.setImageDrawable(
-                ContextCompat.getDrawable(getActivity(), R.drawable.default_background));
+                ContextCompat.getDrawable(getActivity(), R.drawable.default_background_details));
         int width = convertDpToPixel(getActivity().getApplicationContext(), DETAIL_THUMB_WIDTH);
         int height = convertDpToPixel(getActivity().getApplicationContext(), DETAIL_THUMB_HEIGHT);
         Glide.with(getActivity())
                 .load(mSelectedNews.getProfileImageUrl())
                 .centerCrop()
-                .error(R.drawable.default_background)
+                .error(R.drawable.default_background_details)
                 .into(new SimpleTarget<GlideDrawable>(width, height) {
                     @Override
                     public void onResourceReady(GlideDrawable resource,
