@@ -30,7 +30,7 @@ public abstract class NewsAbstractPresenter extends Presenter {
     public static class ViewHolder extends Presenter.ViewHolder {
         final TextView mTitle;
         final TextView mAuthor;
-        final TextView mDate;
+        //final TextView mDate;
         final TextView mLid;
         final TextView mDesc;
 
@@ -57,9 +57,6 @@ public abstract class NewsAbstractPresenter extends Presenter {
             return mAuthor;
         }
 
-        public TextView getmDate() {
-            return mDate;
-        }
 
         public TextView getmLid() {
             return mLid;
@@ -72,8 +69,8 @@ public abstract class NewsAbstractPresenter extends Presenter {
         public ViewHolder(final View view) {
             super(view);
             mTitle = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.title);
-            mAuthor = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.autor);
-            mDate = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.datum);
+            mAuthor = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.autordate);
+            //mDate = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.datum);
             mLid = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.lid);
             mDesc =(TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.description);
 

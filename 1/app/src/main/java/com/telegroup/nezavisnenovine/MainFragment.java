@@ -204,14 +204,14 @@ public class MainFragment extends BrowseFragment {
     }
 
     private void setupEventListeners() {
-        setOnSearchClickedListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
+//        setOnSearchClickedListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
+//                        .show();
+//            }
+//        });
 
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
@@ -247,9 +247,9 @@ public class MainFragment extends BrowseFragment {
         @Override
         public void onItemClicked(final Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
-
+            News xx= (News) item;
             temp = new News();
-
+            temp.setProfileImageUrl(xx.getProfileImageUrl());
             if (item instanceof News) {
 
                 News news =(News) item;

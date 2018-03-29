@@ -14,8 +14,15 @@
 
 package com.telegroup.nezavisnenovine;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import android.text.Html;
 import android.util.Log;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
 
@@ -24,14 +31,16 @@ public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
         //Movie movie = (Movie) item;
         News news = (News) item;
 
-        Log.d("Test", "Printing from presenter: " + news.getTitle() + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        Log.d("Test", "Printing from presenter: " + news.getProfileImageUrl() + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         if (news != null) {
 
             viewHolder.getmTitle().setText(news.getTitle());
-            viewHolder.getmAuthor().setText(news.getAuthor());
-            viewHolder.getmDate().setText(news.getDate());
+            String authorDate = "Autor: " + news.getAuthor() + " | Datum: " + news.getDate();
+            viewHolder.getmAuthor().setText(authorDate);
+            //viewHolder.getmDate().setText(news.getDate());
             viewHolder.getmLid().setText(news.getLid());
-            viewHolder.getmDesc().setText(news.getBody());
+            viewHolder.getmDesc().setText(Html.fromHtml(news.getBody()));
+            //viewHolder.getmImageView().setImageBitmap(img);
 
         }
     }
