@@ -12,27 +12,20 @@
  * the License.
  */
 
-package com.telegroup.nezavisnenovine;
+package com.telegroup.test;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
-import android.util.Log;
 
-public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
+public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
     protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        //Movie movie = (Movie) item;
-        News news = (News) item;
+        Movie movie = (Movie) item;
 
-        Log.d("Test", "Printing from presenter: " + news.getTitle() + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        if (news != null) {
-
-            viewHolder.getmTitle().setText(news.getTitle());
-            viewHolder.getmAuthor().setText(news.getAuthor());
-            viewHolder.getmDate().setText(news.getDate());
-            viewHolder.getmLid().setText(news.getLid());
-            viewHolder.getmDesc().setText(news.getBody());
-
+        if (movie != null) {
+            viewHolder.getTitle().setText(movie.getTitle());
+            viewHolder.getSubtitle().setText(movie.getStudio());
+            viewHolder.getBody().setText(movie.getDescription());
         }
     }
 }

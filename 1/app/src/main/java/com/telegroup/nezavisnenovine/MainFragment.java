@@ -244,7 +244,7 @@ public class MainFragment extends BrowseFragment {
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+        public void onItemClicked(final Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             temp = new News();
@@ -255,7 +255,7 @@ public class MainFragment extends BrowseFragment {
                 Log.d(TAG, "Item: " + item.toString());
 
                 String url2 = "http://dtp.nezavisne.com/app/v2/vijesti/" + news.getNewsID();
-                Log.d(TAG, news.getNewsID() + " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                //Log.d(TAG, news.getNewsID() + " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2, null, new Response.Listener<JSONObject>() {
@@ -263,7 +263,7 @@ public class MainFragment extends BrowseFragment {
                     public void onResponse(JSONObject response) {
                        // int length= response.length();
                         try {
-                            Log.d(TAG, " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                            Log.d(TAG, "Entering response xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                             JSONObject obj = response;
                             JSONArray imageArray = obj.getJSONArray("Slika");
                             JSONObject image = imageArray.getJSONObject(0);
@@ -290,6 +290,15 @@ public class MainFragment extends BrowseFragment {
                             temp.setAuthor(autor);
                             temp.setDate(datum);
 
+                            Log.d(TAG, temp.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+                            Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                            intent.putExtra(DetailsActivity.NEWS, temp);
+
+                            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    getActivity(),
+                                    ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                                    DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+                            getActivity().startActivity(intent, bundle);
                              //news.setLid(obj.getString("Lid"));
 
 
@@ -320,15 +329,15 @@ public class MainFragment extends BrowseFragment {
                 news.setDate(temp.getDate());
 
 
-                Log.d(TAG, news.getBody() + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra(DetailsActivity.NEWS, news);
-
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                getActivity().startActivity(intent, bundle);
+//                Log.d(TAG, news.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+//                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+//                intent.putExtra(DetailsActivity.NEWS, temp);
+//
+//                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                        getActivity(),
+//                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+//                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+//                getActivity().startActivity(intent, bundle);
             } else if (item instanceof String) {
                 if (((String) item).contains(getString(R.string.error_fragment))) {
                     Intent intent = new Intent(getActivity(), BrowseErrorActivity.class);

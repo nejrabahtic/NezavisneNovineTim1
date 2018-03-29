@@ -29,13 +29,12 @@ public abstract class NewsAbstractPresenter extends Presenter {
 
     public static class ViewHolder extends Presenter.ViewHolder {
         final TextView mTitle;
-        final TextView mSubtitle;
-        final TextView mBody;
-        final TextView newsBody;
+        final TextView mAuthor;
+        final TextView mDate;
+        final TextView mLid;
+        final TextView mDesc;
 
-        public TextView getNewsBody() {
-            return newsBody;
-        }
+
 
         final int mTitleMargin;
         final int mUnderTitleBaselineMargin;
@@ -50,12 +49,33 @@ public abstract class NewsAbstractPresenter extends Presenter {
         final int mTitleMaxLines;
         private ViewTreeObserver.OnPreDrawListener mPreDrawListener;
 
+        public TextView getmTitle() {
+            return mTitle;
+        }
+
+        public TextView getmAuthor() {
+            return mAuthor;
+        }
+
+        public TextView getmDate() {
+            return mDate;
+        }
+
+        public TextView getmLid() {
+            return mLid;
+        }
+
+        public TextView getmDesc() {
+            return mDesc;
+        }
+
         public ViewHolder(final View view) {
             super(view);
-            mTitle = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.lb_details_description_title);
-            mSubtitle = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.lb_details_description_subtitle);
-            mBody = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.lb_details_description_body);
-            newsBody = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.body);
+            mTitle = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.title);
+            mAuthor = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.autor);
+            mDate = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.datum);
+            mLid = (TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.lid);
+            mDesc =(TextView) view.findViewById(com.telegroup.nezavisnenovine.R.id.description);
 
             FontMetricsInt titleFontMetricsInt = getFontMetricsInt(mTitle);
             final int titleAscent = view.getResources().getDimensionPixelSize(
@@ -80,8 +100,8 @@ public abstract class NewsAbstractPresenter extends Presenter {
             mTitleMaxLines = mTitle.getMaxLines();
 
             mTitleFontMetricsInt = getFontMetricsInt(mTitle);
-            mSubtitleFontMetricsInt = getFontMetricsInt(mSubtitle);
-            mBodyFontMetricsInt = getFontMetricsInt(mBody);
+            mSubtitleFontMetricsInt = getFontMetricsInt(mLid);
+            mBodyFontMetricsInt = getFontMetricsInt(mDesc);
 
             mTitle.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
@@ -99,16 +119,16 @@ public abstract class NewsAbstractPresenter extends Presenter {
             mPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
-                    if (mSubtitle.getVisibility() == View.VISIBLE
-                            && mSubtitle.getTop() > view.getHeight()
+                    if (mLid.getVisibility() == View.VISIBLE
+                            && mLid.getTop() > view.getHeight()
                             && mTitle.getLineCount() > 1) {
                         mTitle.setMaxLines(mTitle.getLineCount() - 1);
                         return false;
                     }
                     final int titleLines = mTitle.getLineCount();
                     final int maxLines = titleLines > 1 ? mBodyMinLines : mBodyMaxLines;
-                    if (mBody.getMaxLines() != maxLines) {
-                        mBody.setMaxLines(maxLines);
+                    if (mDesc.getMaxLines() != maxLines) {
+                        mDesc.setMaxLines(maxLines);
                         return false;
                     } else {
                         removePreDrawListener();
@@ -125,19 +145,6 @@ public abstract class NewsAbstractPresenter extends Presenter {
                 mPreDrawListener = null;
             }
         }
-
-        public TextView getTitle() {
-            return mTitle;
-        }
-
-        public TextView getSubtitle() {
-            return mSubtitle;
-        }
-
-        public TextView getBody() {
-            return mBody;
-        }
-
 
 
         private FontMetricsInt getFontMetricsInt(TextView textView) {
@@ -174,34 +181,34 @@ public abstract class NewsAbstractPresenter extends Presenter {
         setTopMargin(vh.mTitle, vh.mTitleMargin);
 
         boolean hasSubtitle = true;
-        if (TextUtils.isEmpty(vh.mSubtitle.getText())) {
-            vh.mSubtitle.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(vh.mLid.getText())) {
+            vh.mLid.setVisibility(View.GONE);
             hasSubtitle = false;
         } else {
-            vh.mSubtitle.setVisibility(View.VISIBLE);
+            vh.mLid.setVisibility(View.VISIBLE);
             if (hasTitle) {
-                setTopMargin(vh.mSubtitle, vh.mUnderTitleBaselineMargin
+                setTopMargin(vh.mLid, vh.mUnderTitleBaselineMargin
                         + vh.mSubtitleFontMetricsInt.ascent - vh.mTitleFontMetricsInt.descent);
             } else {
-                setTopMargin(vh.mSubtitle, 0);
+                setTopMargin(vh.mLid, 0);
             }
         }
 
-        if (TextUtils.isEmpty(vh.mBody.getText())) {
-            vh.mBody.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(vh.mDesc.getText())) {
+            vh.mDesc.setVisibility(View.GONE);
         } else {
-            vh.mBody.setVisibility(View.VISIBLE);
-            vh.mBody.setLineSpacing(vh.mBodyLineSpacing - vh.mBody.getLineHeight()
-                    + vh.mBody.getLineSpacingExtra(), vh.mBody.getLineSpacingMultiplier());
+            vh.mDesc.setVisibility(View.VISIBLE);
+            vh.mDesc.setLineSpacing(vh.mBodyLineSpacing - vh.mDesc.getLineHeight()
+                    + vh.mDesc.getLineSpacingExtra(), vh.mDesc.getLineSpacingMultiplier());
 
             if (hasSubtitle) {
-                setTopMargin(vh.mBody, vh.mUnderSubtitleBaselineMargin
+                setTopMargin(vh.mDesc, vh.mUnderSubtitleBaselineMargin
                         + vh.mBodyFontMetricsInt.ascent - vh.mSubtitleFontMetricsInt.descent);
             } else if (hasTitle) {
-                setTopMargin(vh.mBody, vh.mUnderTitleBaselineMargin
+                setTopMargin(vh.mDesc, vh.mUnderTitleBaselineMargin
                         + vh.mBodyFontMetricsInt.ascent - vh.mTitleFontMetricsInt.descent);
             } else {
-                setTopMargin(vh.mBody, 0);
+                setTopMargin(vh.mDesc, 0);
             }
         }
     }
