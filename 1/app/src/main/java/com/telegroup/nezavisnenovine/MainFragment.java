@@ -59,6 +59,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -77,6 +78,7 @@ public class MainFragment extends BrowseFragment {
     private static final int GRID_ITEM_HEIGHT = 200;
     private static final int NUM_ROWS = 6;
     private static final int NUM_COLS = 15;
+    private static News temp = null;
 
     private final Handler mHandler = new Handler();
     private ArrayObjectAdapter mRowsAdapter;
@@ -243,30 +245,61 @@ public class MainFragment extends BrowseFragment {
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+        public void onItemClicked(final Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
+
+            temp = new News();
 
             if (item instanceof News) {
 
-                final News news =(News) item;
+                News news =(News) item;
                 Log.d(TAG, "Item: " + item.toString());
 
                 String url2 = "http://dtp.nezavisne.com/app/v2/vijesti/" + news.getNewsID();
+                //Log.d(TAG, news.getNewsID() + " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
-                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url2, null, new Response.Listener<JSONArray>() {
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2, null, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        int length= response.length();
+                    public void onResponse(JSONObject response) {
+                       // int length= response.length();
                         try {
-                            JSONObject obj = response.getJSONObject(0);
+                            Log.d(TAG, "Entering response xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                            JSONObject obj = response;
                             JSONArray imageArray = obj.getJSONArray("Slika");
                             JSONObject image = imageArray.getJSONObject(0);
                             String imageUrl = image.getString("slikaURL");
                             String body = obj.getString("Tjelo");
-                            news.setBody(body);
-                            news.setCoverImageUrl(imageUrl);
+                            String lid = obj.getString("Lid");
+                            String id = obj.getString("vijestID");
+                            String naslov = obj.getString("Naslov");
+                            String autor = obj.getString("Autor");
+                            String datum = obj.getString("Datum");
+                            Log.d(TAG, imageUrl + "\n");
+                            Log.d(TAG, body + "\n");
+                            Log.d(TAG, lid + "\n");
+                            Log.d(TAG, id + "\n");
+                            Log.d(TAG, naslov + "\n");
+                            Log.d(TAG, autor + "\n");
+                            Log.d(TAG, datum + "\n");
 
+                            temp.setLid(lid);
+                            temp.setBody(body);
+                            temp.setCoverImageUrl(imageUrl);
+                            temp.setNewsID(id);
+                            temp.setTitle(naslov);
+                            temp.setAuthor(autor);
+                            temp.setDate(datum);
 
+                            Log.d(TAG, temp.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+                            Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                            intent.putExtra(DetailsActivity.NEWS, temp);
+
+                            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    getActivity(),
+                                    ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                                    DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+                            getActivity().startActivity(intent, bundle);
                              //news.setLid(obj.getString("Lid"));
 
 
@@ -286,16 +319,26 @@ public class MainFragment extends BrowseFragment {
                     }
                 });
 
-                AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest, REQUEST_TAG);
+                AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonObjectRequest, REQUEST_TAG);
 
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra(DetailsActivity.NEWS, news);
+                news.setLid(temp.getLid());
+                news.setBody(temp.getBody());
+                news.setCoverImageUrl(temp.getCoverImageUrl());
+                news.setNewsID(temp.getNewsID());
+                news.setTitle(temp.getTitle());
+                news.setAuthor(temp.getAuthor());
+                news.setDate(temp.getDate());
 
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                getActivity().startActivity(intent, bundle);
+
+//                Log.d(TAG, news.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+//                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+//                intent.putExtra(DetailsActivity.NEWS, temp);
+//
+//                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                        getActivity(),
+//                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+//                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+//                getActivity().startActivity(intent, bundle);
             } else if (item instanceof String) {
                 if (((String) item).contains(getString(R.string.error_fragment))) {
                     Intent intent = new Intent(getActivity(), BrowseErrorActivity.class);

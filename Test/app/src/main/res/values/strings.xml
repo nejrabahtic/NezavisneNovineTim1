@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NezavisneNovine</string>
+    <string name="app_name">Test</string>
     <string name="browse_title"><![CDATA[Videos by Your Company]]></string>
     <string name="related_movies">Related Videos</string>
     <string name="grid_view">Grid View</string>
@@ -11,7 +11,7 @@
     <string name="rent_2">From $1.99</string>
     <string name="buy_1">Buy and Own</string>
     <string name="buy_2">AT $9.99</string>
-    <string name="news">News</string>
+    <string name="movie">Movie</string>
     <string name="should_start">shouldStart</string>
 
     <!-- Error messages -->

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.telegroup.nezavisnenovine;
+package com.telegroup.test;
 
 import java.util.ArrayList;
 import java.util.List;
