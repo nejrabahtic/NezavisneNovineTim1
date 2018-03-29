@@ -32,7 +32,7 @@ public abstract class NewsAbstractPresenter extends Presenter {
         final TextView mAuthor;
         //final TextView mDate;
         final TextView mLid;
-        final TextView mDesc;
+         TextView mDesc;
 
 
 

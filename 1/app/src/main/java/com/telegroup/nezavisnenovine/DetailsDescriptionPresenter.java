@@ -30,8 +30,8 @@ public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
     protected void onBindDescription(ViewHolder viewHolder, Object item) {
         //Movie movie = (Movie) item;
         News news = (News) item;
-
-        Log.d("Test", "Printing from presenter: " + news.getProfileImageUrl() + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        String desc= Html.fromHtml(news.getBody()).toString();
+        Log.d("Test", "Printing from presenter: " + Html.fromHtml(news.getBody()) + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         if (news != null) {
 
             viewHolder.getmTitle().setText(news.getTitle());
@@ -39,7 +39,8 @@ public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
             viewHolder.getmAuthor().setText(authorDate);
             //viewHolder.getmDate().setText(news.getDate());
             viewHolder.getmLid().setText(news.getLid());
-            viewHolder.getmDesc().setText(Html.fromHtml(news.getBody()));
+            viewHolder.getmDesc().setText(desc);
+
             //viewHolder.getmImageView().setImageBitmap(img);
 
         }
