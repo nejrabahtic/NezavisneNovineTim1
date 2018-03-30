@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 
 import java.io.InputStream;
@@ -37,11 +38,10 @@ public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
             viewHolder.getmTitle().setText(news.getTitle());
             String authorDate = "Autor: " + news.getAuthor() + " | Datum: " + news.getDate();
             viewHolder.getmAuthor().setText(authorDate);
-            //viewHolder.getmDate().setText(news.getDate());
             viewHolder.getmLid().setText(news.getLid());
             viewHolder.getmDesc().setText(desc);
+            viewHolder.getmDesc().setMovementMethod(new ScrollingMovementMethod());
 
-            //viewHolder.getmImageView().setImageBitmap(img);
 
         }
     }

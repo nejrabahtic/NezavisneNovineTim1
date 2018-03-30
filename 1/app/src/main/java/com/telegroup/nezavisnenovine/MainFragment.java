@@ -142,6 +142,7 @@ public class MainFragment extends BrowseFragment {
                                         String author = obj.getString("Autor");
                                         String date = obj.getString("Datum");
                                         String image = obj.getString("Slika");
+
                                         News news= new News(newsID,title, lid, author, date, null );
                                         news.setProfileImageUrl(image);
 
@@ -192,7 +193,7 @@ public class MainFragment extends BrowseFragment {
     private void setupUIElements() {
          setBadgeDrawable(getActivity().getResources().getDrawable(
         R.drawable.nezavisne_main_fragmet_bigger));
-        setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent
+        //setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent
         // over title
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
@@ -257,8 +258,6 @@ public class MainFragment extends BrowseFragment {
 
                 String url2 = "http://dtp.nezavisne.com/app/v2/vijesti/" + news.getNewsID();
                 //Log.d(TAG, news.getNewsID() + " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-
-
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -275,6 +274,7 @@ public class MainFragment extends BrowseFragment {
                             String naslov = obj.getString("Naslov");
                             String autor = obj.getString("Autor");
                             String datum = obj.getString("Datum");
+                            String category= obj.getString("meniRoditelj");
                             Log.d(TAG, imageUrl + "\n");
                             Log.d(TAG, body + "\n");
                             Log.d(TAG, lid + "\n");
@@ -290,7 +290,7 @@ public class MainFragment extends BrowseFragment {
                             temp.setTitle(naslov);
                             temp.setAuthor(autor);
                             temp.setDate(datum);
-
+                            temp.setCategory(category);
                             Log.d(TAG, temp.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
                             Intent intent = new Intent(getActivity(), DetailsActivity.class);
                             intent.putExtra(DetailsActivity.NEWS, temp);

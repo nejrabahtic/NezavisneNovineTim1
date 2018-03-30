@@ -41,10 +41,19 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +64,7 @@ import java.util.List;
  */
 public class NewsDetailsFragment extends DetailsFragment {
     private static final String TAG = "NewsDetailsFragment";
-
+    public String  REQUEST_TAG = "com.androidtutorialpoint.volleyStringRequest";
     private static final int ACTION_WATCH_TRAILER = 1;
     private static final int ACTION_RENT = 2;
     private static final int ACTION_BUY = 3;
@@ -86,7 +95,8 @@ public class NewsDetailsFragment extends DetailsFragment {
             mAdapter = new ArrayObjectAdapter(mPresenterSelector);
             setupDetailsOverviewRow();
             setupDetailsOverviewRowPresenter();
-//            setupRelatedMovieListRow();
+
+            setupRelatedMovieListRow(mSelectedNews);
             setAdapter(mAdapter);
             initializeBackground(mSelectedNews);
             setOnItemViewClickedListener(new ItemViewClickedListener());
@@ -188,20 +198,55 @@ public class NewsDetailsFragment extends DetailsFragment {
         mPresenterSelector.addClassPresenter(DetailsOverviewRow.class, detailsPresenter);
     }
 
-//    private void setupRelatedMovieListRow() {
-//        String subcategories[] = {getString(R.string.related_movies)};
-//        List<Movie> list = MovieList.getList();
-//
-//        Collections.shuffle(list);
-//        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new CardPresenter());
-//        for (int j = 0; j < NUM_COLS; j++) {
-//            listRowAdapter.add(list.get(j % 5));
-//        }
-//
-//        HeaderItem header = new HeaderItem(0, subcategories[0]);
-//        mAdapter.add(new ListRow(header, listRowAdapter));
-//        mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
-//    }
+    private void setupRelatedMovieListRow(final News news1) {
+        final ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new CardPresenter());
+        for (int j = 0; j < 9; j++) {
+           // listRowAdapter.add(news);
+        }
+        String url= "http://dtp.nezavisne.com/app/rubrika/"+ news1.getCategory()+"/1/11";
+        JsonArrayRequest jsonArrayRequest2 = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                int length= response.length();
+                for(int i=0; i< length; i++){
+                    try {
+                        JSONObject obj = response.getJSONObject(i);
+                        String newsID = obj.getString("vijestID");
+                        String title = obj.getString("Naslov");
+                        String lid = obj.getString("Lid");
+                        String author = obj.getString("Autor");
+                        String date = obj.getString("Datum");
+                        String image = obj.getString("Slika");
+
+                        News news= new News(newsID,title, lid, author, date, null );
+                        news.setProfileImageUrl(image);
+                        if(news1.getNewsID().equals(news.getNewsID()))
+                        {
+
+                        }else
+                        {
+                            listRowAdapter.add(news);
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest2, REQUEST_TAG);
+
+        HeaderItem header = new HeaderItem(0, "Povezane vijesti");
+        mAdapter.add(new ListRow(header, listRowAdapter));
+        mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
+    }
 
     public int convertDpToPixel(Context context, int dp) {
         float density = context.getResources().getDisplayMetrics().density;
@@ -210,19 +255,77 @@ public class NewsDetailsFragment extends DetailsFragment {
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+        public void onItemClicked(final Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof News) {
-                Log.d(TAG, "Item: " + item.toString());
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra(getResources().getString(R.string.news), mSelectedNews);
 
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                getActivity().startActivity(intent, bundle);
+                News news = (News) item;
+                String url2 = "http://dtp.nezavisne.com/app/v2/vijesti/" + news.getNewsID();
+                final News temp= new News();
+                temp.setProfileImageUrl(news.getProfileImageUrl());
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // int length= response.length();
+                        try {
+                            Log.d(TAG, "Entering response xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                            JSONObject obj = response;
+                            JSONArray imageArray = obj.getJSONArray("Slika");
+                            JSONObject image = imageArray.getJSONObject(0);
+                            String imageUrl = image.getString("slikaURL");
+                            String body = obj.getString("Tjelo");
+                            String lid = obj.getString("Lid");
+                            String id = obj.getString("vijestID");
+                            String naslov = obj.getString("Naslov");
+                            String autor = obj.getString("Autor");
+                            String datum = obj.getString("Datum");
+                            String category= obj.getString("meniRoditelj");
+                            Log.d(TAG, imageUrl + "\n");
+                            Log.d(TAG, body + "\n");
+                            Log.d(TAG, lid + "\n");
+                            Log.d(TAG, id + "\n");
+                            Log.d(TAG, naslov + "\n");
+                            Log.d(TAG, autor + "\n");
+                            Log.d(TAG, datum + "\n");
+
+                            temp.setLid(lid);
+                            temp.setBody(body);
+                            temp.setCoverImageUrl(imageUrl);
+                            temp.setNewsID(id);
+                            temp.setTitle(naslov);
+                            temp.setAuthor(autor);
+                            temp.setDate(datum);
+                            temp.setCategory(category);
+                            Log.d(TAG, temp.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+                            Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                            intent.putExtra(DetailsActivity.NEWS, temp);
+
+                            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    getActivity(),
+                                    ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                                    DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+                            getActivity().startActivity(intent, bundle);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+                AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonObjectRequest, REQUEST_TAG);
+//                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+//                intent.putExtra(getResources().getString(R.string.news), (News) item);
+//
+//                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                        getActivity(),
+//                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+//                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+//                getActivity().startActivity(intent, bundle);
             }
         }
     }

@@ -24,9 +24,17 @@ public class News  implements Serializable{
     private String body;
     private String profileImageUrl;
     private String coverImageUrl;
-
+    private String category;
 
     public News() {}
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public void setNewsID(String newsID) {
         this.newsID = newsID;
