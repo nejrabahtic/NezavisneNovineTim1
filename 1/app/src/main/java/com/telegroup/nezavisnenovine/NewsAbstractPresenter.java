@@ -90,10 +90,6 @@ public abstract class NewsAbstractPresenter extends Presenter {
             mBodyLineSpacing = view.getResources().getDimensionPixelSize(
                     R.dimen.lb_details_description_body_line_spacing);
 
-//            mBodyMaxLines = view.getResources().getInteger(
-//                    R.integer.lb_details_description_body_max_lines);
-//            mBodyMinLines = view.getResources().getInteger(
-//                    R.integer.lb_details_description_body_min_lines);
             mBodyMinLines = 200;
             mBodyMaxLines = 1000;
             mTitleMaxLines = mTitle.getMaxLines();

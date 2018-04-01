@@ -25,8 +25,17 @@ public class News  implements Serializable{
     private String profileImageUrl;
     private String coverImageUrl;
     private String category;
+    private String color;
 
     public News() {}
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public String getCategory() {
         return category;

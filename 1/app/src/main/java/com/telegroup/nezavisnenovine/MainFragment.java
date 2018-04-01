@@ -20,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -80,6 +81,8 @@ public class MainFragment extends BrowseFragment {
     private static final int NUM_COLS = 15;
     private static News temp = null;
 
+    private static HashMap<String, String> backgrounds = new HashMap<>();
+
     private final Handler mHandler = new Handler();
     private ArrayObjectAdapter mRowsAdapter;
     private Drawable mDefaultBackground;
@@ -126,6 +129,7 @@ public class MainFragment extends BrowseFragment {
                         String name = obj.getString("Naziv");
                         String menuID = obj.getString("meniID");
                         String color= obj.getString("Boja");
+                        backgrounds.put(menuID, color);
                         String url2= "http://dtp.nezavisne.com/app/rubrika/"+menuID+ "/1/10";
                         final ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
                         HeaderItem header = new HeaderItem(i, name);
@@ -257,13 +261,11 @@ public class MainFragment extends BrowseFragment {
                 Log.d(TAG, "Item: " + item.toString());
 
                 String url2 = "http://dtp.nezavisne.com/app/v2/vijesti/" + news.getNewsID();
-                //Log.d(TAG, news.getNewsID() + " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url2, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                        // int length= response.length();
                         try {
-                            Log.d(TAG, "Entering response xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                             JSONObject obj = response;
                             JSONArray imageArray = obj.getJSONArray("Slika");
                             JSONObject image = imageArray.getJSONObject(0);
@@ -275,6 +277,7 @@ public class MainFragment extends BrowseFragment {
                             String autor = obj.getString("Autor");
                             String datum = obj.getString("Datum");
                             String category= obj.getString("meniRoditelj");
+                            String color = obj.getString("meniRoditeljBoja");
                             Log.d(TAG, imageUrl + "\n");
                             Log.d(TAG, body + "\n");
                             Log.d(TAG, lid + "\n");
@@ -291,7 +294,7 @@ public class MainFragment extends BrowseFragment {
                             temp.setAuthor(autor);
                             temp.setDate(datum);
                             temp.setCategory(category);
-                            Log.d(TAG, temp.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+                            temp.setColor(color);
                             Intent intent = new Intent(getActivity(), DetailsActivity.class);
                             intent.putExtra(DetailsActivity.NEWS, temp);
 
@@ -300,12 +303,6 @@ public class MainFragment extends BrowseFragment {
                                     ((ImageCardView) itemViewHolder.view).getMainImageView(),
                                     DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
                             getActivity().startActivity(intent, bundle);
-                             //news.setLid(obj.getString("Lid"));
-
-
-                            //news.setProfileImageUrl(image);
-
-                            //listRowAdapter.add(news);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -328,17 +325,9 @@ public class MainFragment extends BrowseFragment {
                 news.setTitle(temp.getTitle());
                 news.setAuthor(temp.getAuthor());
                 news.setDate(temp.getDate());
+                news.setCategory(temp.getCategory());
+                news.setColor(temp.getColor());
 
-
-//                Log.d(TAG, news.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
-//                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//                intent.putExtra(DetailsActivity.NEWS, temp);
-//
-//                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                        getActivity(),
-//                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-//                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-//                getActivity().startActivity(intent, bundle);
             } else if (item instanceof String) {
                 if (((String) item).contains(getString(R.string.error_fragment))) {
                     Intent intent = new Intent(getActivity(), BrowseErrorActivity.class);
@@ -356,7 +345,7 @@ public class MainFragment extends BrowseFragment {
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof News) {
-                mBackgroundUri = ((News) item).getCoverImageUrl();
+                mBackgroundUri = backgrounds.get(((News) item).getCategory());
                 startBackgroundTimer();
             }
         }
@@ -397,5 +386,12 @@ public class MainFragment extends BrowseFragment {
         public void onUnbindViewHolder(ViewHolder viewHolder) {
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mDefaultBackground = getResources().getDrawable(R.drawable.default_background);
+        mBackgroundManager.setDrawable(mDefaultBackground);
+   }
 
 }

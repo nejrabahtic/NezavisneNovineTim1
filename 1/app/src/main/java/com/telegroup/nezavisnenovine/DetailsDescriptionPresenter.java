@@ -32,7 +32,6 @@ public class DetailsDescriptionPresenter extends NewsAbstractPresenter {
         //Movie movie = (Movie) item;
         News news = (News) item;
         String desc= Html.fromHtml(news.getBody()).toString();
-        Log.d("Test", "Printing from presenter: " + Html.fromHtml(news.getBody()) + "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         if (news != null) {
 
             viewHolder.getmTitle().setText(news.getTitle());

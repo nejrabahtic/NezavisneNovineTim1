@@ -146,24 +146,6 @@ public class NewsDetailsFragment extends DetailsFragment {
                     }
                 });
 
-//        ArrayObjectAdapter actionAdapter = new ArrayObjectAdapter();
-//
-//        actionAdapter.add(
-//                new Action(
-//                        ACTION_WATCH_TRAILER,
-//                        getResources().getString(R.string.watch_trailer_1),
-//                        getResources().getString(R.string.watch_trailer_2)));
-//        actionAdapter.add(
-//                new Action(
-//                        ACTION_RENT,
-//                        getResources().getString(R.string.rent_1),
-//                        getResources().getString(R.string.rent_2)));
-//        actionAdapter.add(
-//                new Action(
-//                        ACTION_BUY,
-//                        getResources().getString(R.string.buy_1),
-//                        getResources().getString(R.string.buy_2)));
-//        row.setActionsAdapter(actionAdapter);
 
         mAdapter.add(row);
     }
@@ -269,7 +251,6 @@ public class NewsDetailsFragment extends DetailsFragment {
                     public void onResponse(JSONObject response) {
                         // int length= response.length();
                         try {
-                            Log.d(TAG, "Entering response xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                             JSONObject obj = response;
                             JSONArray imageArray = obj.getJSONArray("Slika");
                             JSONObject image = imageArray.getJSONObject(0);
@@ -297,7 +278,6 @@ public class NewsDetailsFragment extends DetailsFragment {
                             temp.setAuthor(autor);
                             temp.setDate(datum);
                             temp.setCategory(category);
-                            Log.d(TAG, temp.getTitle() + "TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
                             Intent intent = new Intent(getActivity(), DetailsActivity.class);
                             intent.putExtra(DetailsActivity.NEWS, temp);
 
@@ -318,14 +298,7 @@ public class NewsDetailsFragment extends DetailsFragment {
                     }
                 });
                 AppSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonObjectRequest, REQUEST_TAG);
-//                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//                intent.putExtra(getResources().getString(R.string.news), (News) item);
-//
-//                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                        getActivity(),
-//                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-//                        DetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-//                getActivity().startActivity(intent, bundle);
+
             }
         }
     }
